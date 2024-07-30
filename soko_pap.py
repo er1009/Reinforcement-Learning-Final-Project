@@ -727,6 +727,7 @@ class SokobanEnv(gym.Env):
                  max_steps=120,
                  num_boxes=4,
                  num_gen_steps=None,
+                 seed_value=None,
                  reset=True):
 
         # General Configuration
@@ -762,7 +763,7 @@ class SokobanEnv(gym.Env):
         self.player_box_weight = 0.5
         self.decay_factor = 1
 
-        self.seed_value = 2
+        self.seed_value = seed_value
  
         if reset:
             # Initialize Room
@@ -1035,9 +1036,8 @@ class SokobanEnv(gym.Env):
         return coordinates_vector
 
     def reset(self, seed=GLOBAL_SEED, options=None, second_player=False, render_mode='rgb_array'):
-        # seed = 2
-        # self.seed(None)
-        super().reset()
+        self.seed(self.seed_value)
+        super().reset(seed=self.seed_value)
         try:
             self.room_fixed, self.room_state, self.box_mapping = generate_room(
                 dim=self.dim_room,
